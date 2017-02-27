@@ -93,9 +93,11 @@ Then functions `cv2.getPerspectiveTransform` and `cv2.warpPerspective` are used 
 <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/top_down_straight_lines1.jpg" width="30%"> <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/top_down_test3.jpg" width="30%"> 
 
 
-####4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
+####4. Finding Lane pixels and Fitting
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+For a given image, a rough position of the lanes can be estimated by summing up the warped image from the previous stage in the vertical direction. The python notebook submission includes histogram plots for each of the test images. The function "window_centroids" contains the code that finds lane  pixels using window-search method, given a warped image from the previous stage. In this method we split the image into levels and use sliding convolution to find out lane pixels in each level. This function returns left lane and right lane pixel coordinates for each level. In my code, I append centroids only when both the left and right lane pixels are found in a given level.
+
+Once the lane pixels are found, we plot those windows on the warped image
 
 ![alt text][image5]
 
