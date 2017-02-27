@@ -97,7 +97,11 @@ Then functions `cv2.getPerspectiveTransform` and `cv2.warpPerspective` are used 
 
 For a given image, a rough position of the lanes can be estimated by summing up the warped image from the previous stage in the vertical direction. The python notebook submission includes histogram plots for each of the test images. The function "window_centroids" contains the code that finds lane  pixels using window-search method, given a warped image from the previous stage. In this method we split the image into levels and use sliding convolution to find out lane pixels in each level. This function returns left lane and right lane pixel coordinates for each level. In my code, I append centroids only when both the left and right lane pixels are found in a given level.
 
-Once the lane pixels are found, we plot those windows on the warped image
+Once the lane pixels are found, we plot those windows on the warped image as a sanity check. This gives us an idea about the window height and the width to use for a given test scenario. I found out that for a very curved road, the window height needs to be decreased to a very small value to be able to trace that lane.
+
+An example output on a warped image is presented below:
+
+<img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/top_down_windowed_test3.jpg" width="30%">
 
 ![alt text][image5]
 
