@@ -66,13 +66,17 @@ The function "color_n_grad_thresh" calls the required functions to create a thre
 
 The following images show how each of the gradients affect the test image.
 
-Original Image: <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/test_images/straight_lines1.jpg" width="30%"> 
+Original Image: 
+<img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/test_images/straight_lines1.jpg" width="30%"> 
 
-Color thresholding : <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/color_thresh_straight_lines1.jpg" width="30%">
+Color thresholding : 
+<img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/color_thresh_straight_lines1.jpg" width="30%">
 
-Gradient thresholding : <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/grad_thresh_straight_lines1.jpg" width="30%">
+Gradient thresholding : 
+<img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/grad_thresh_straight_lines1.jpg" width="30%">
 
-Final Binary Image: <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/binary_straight_lines1.jpg" width="30%">
+Final Binary Image: 
+<img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/binary_straight_lines1.jpg" width="30%">
 
 ####3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
