@@ -44,14 +44,15 @@ First, "object points" are created, which are 3D (x, y, z) coordinates of the ch
 
 The camera calibration and distortion coefficients are calculated using the `cv2.calibrateCamera()` function. The calculated parameters (mtx, dist) are then used to undistort the chessboard images to verify correctness. The `cv2.undistort()` function is used for this purporse. The following image shows an undistorted (right) chessboard image from this project.
 
-<img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/calibration5.jpg" width="30%"> <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/undist_calibration5.jpg" width="30%">
+<img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/camera_cal/calibration5.jpg" width="30%"> <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/undist_calibration5.jpg" width="30%">
 
 
 ###Pipeline (single images)
 
 ####1. Distortion Correction
 The first stage of my pipeline is to undistort each frame. The distortion matrices calculated above (camera calibration) are used to undistort each image. The following is the output using one of the test images.
-<img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/undist_test5.jpg" width="30%">
+
+<img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/test_images/test5.jpg" width="30%"> <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/undist_test5.jpg" width="30%">
 
 ####2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
