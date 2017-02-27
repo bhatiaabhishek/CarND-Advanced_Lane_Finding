@@ -15,15 +15,6 @@ The goals / steps of this project are the following:
 * Warp the detected lane boundaries back onto the original image.
 * Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position.
 
-[//]: # (Image References)
-
-[image1]: ./output_images/calibration5.jpg "Distorted"
-[image2]: ./output_images/undist_calibration5.jpg "Undistorted"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
-[video1]: ./project_video.mp4 "Video"
 
 
 ###Camera Calibration
@@ -95,7 +86,7 @@ Then functions `cv2.getPerspectiveTransform` and `cv2.warpPerspective` are used 
 
 ####4. Finding Lane pixels and Fitting
 
-For a given image, a rough position of the lanes can be estimated by summing up the warped image from the previous stage in the vertical direction. The python notebook submission includes histogram plots for each of the test images. The function "window_centroids" contains the code that finds lane  pixels using window-search method, given a warped image from the previous stage. In this method we split the image into levels and use sliding convolution to find out lane pixels in each level. This function returns left lane and right lane pixel coordinates for each level. In my code, I append centroids only when both the left and right lane pixels are found in a given level.
+For a given image, a rough position of the lanes can be estimated by summing up the warped image from the previous stage in the vertical direction. The python notebook submission includes histogram plots for each of the test images. The function "window_centroids" contains the code that finds lane  pixels using window-search method, given a warped image from the previous stage. In this method we split the image into levels and use sliding convolution to find out lane pixels in each level. This function returns left lane and right lane pixel coordinates for each level. In my code, I append centroids only when both the left and right lane pixels are found (convolution result > 0) in a given level.
 
 Once the lane pixels are found, we plot those windows on the warped image as a sanity check. This gives us an idea about the window height and the width to use for a given test scenario. I found out that for a very curved road, the window height needs to be decreased to a very small value to be able to trace that lane.
 
@@ -103,7 +94,9 @@ An example output on a warped image is presented below:
 
 <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/top_down_windowed_test3.jpg" width="30%">
 
-![alt text][image5]
+Once we have the lane pixels, these are used as data points to fit a 2nd degree polynomial using the formula below.
+
+
 
 ####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
