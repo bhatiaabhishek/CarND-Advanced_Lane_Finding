@@ -78,35 +78,20 @@ Gradient thresholding :
 Final Binary Image: 
 <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/binary_straight_lines1.jpg" width="30%">
 
-####3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
+####3. Perspective Transform and Warping
+At this stage we transform the image to a "bird-eye" view of the lane using perspective transform. The function "perspective_points" in the code returns src and dst points. I derive the src points as a trapezium whose Height, Top and Bottom widhts are specified as % of the image dimensions.
 
-The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+    app_lane_center = ((img_size[0]/2),img_size[1]) # This is the expected center of the lane i.e. center of the trapezium
+    height_cent = 0.25 # Height of the trapezium  as % of image Y
+    bott_cent = 1.0 # Bottom width as a % of image X
+    top_cent = 0.41 # Top width as a % of image X
 
-```
-src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
-dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
+The dst points are derived by just making a trapezium into a rectangle i.e. stretch top width to be same as the bottom width.
 
-```
-This resulted in the following source and destination points:
+Then functions `cv2.getPerspectiveTransform` and `cv2.warpPerspective` are used to warp the image using the `src` and `dst` points. Ideally the lanes should appear parallel in the warped image, if implemented correctly. The following couple of images show outputs of the warping stage.
 
-| Source        | Destination   | 
-|:-------------:|:-------------:| 
-| 585, 460      | 320, 0        | 
-| 203, 720      | 320, 720      |
-| 1127, 720     | 960, 720      |
-| 695, 460      | 960, 0        |
+<img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/top_down_straight_lines1.jpg" width="30%"> <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/top_down_test3.jpg" width="30%"> 
 
-I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
-
-![alt text][image4]
 
 ####4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
