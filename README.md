@@ -17,8 +17,8 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./output_images/undist_calibration5.jpg "Undistorted"
-[image2]: ./test_images/test1.jpg "Road Transformed"
+[image1]: ./output_images/calibration5.jpg "Distorted"
+[image2]: ./output_images/undist_calibration5.jpg "Undistorted"
 [image3]: ./examples/binary_combo_example.jpg "Binary Example"
 [image4]: ./examples/warped_straight_lines.jpg "Warp Example"
 [image5]: ./examples/color_fit_lines.jpg "Fit Visual"
@@ -43,8 +43,8 @@ class calibration_mat:
 First, "object points" are created, which are 3D (x, y, z) coordinates of the chessboard corners in the real world. It is assumed that the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time we successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection. The corners in the image plane can be found using function `cv2.findChessboardCorners(gray, (nx, ny), None)`.
 
 The camera calibration and distortion coefficients are calculated using the `cv2.calibrateCamera()` function. The calculated parameters (mtx, dist) are then used to undistort the chessboard images to verify correctness. The `cv2.undistort()` function is used for this purporse. The following image shows an undistorted chessboard image with the corners drawn.
+<img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/calibration5.jpg" width="30%"> <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/undist_calibration5.jpg" width="30%">
 
-![alt text][image1]
 
 ###Pipeline (single images)
 
