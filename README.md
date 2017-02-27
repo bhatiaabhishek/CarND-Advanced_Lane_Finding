@@ -49,15 +49,30 @@ The camera calibration and distortion coefficients are calculated using the `cv2
 
 ###Pipeline (single images)
 
+My pipeline is basically the function called "find_lane" in the code. This function calls other functions to implement different stages of the pipeline.
+
 ####1. Distortion Correction
-The first stage of my pipeline is to undistort each frame. The distortion matrices calculated above (camera calibration) are used to undistort each image. The following is the output using one of the test images.
+The first stage of my pipeline is to undistort each frame. The distortion matrices calculated above (camera calibration) are used to undistort each image. The following is the output using one of the test images (undistorted image on the right).
 
 <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/test_images/test5.jpg" width="30%"> <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/undist_test5.jpg" width="30%">
 
-####2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
+####2. Color and Gradient Threshold 
+The function "color_n_grad_thresh" calls the required functions to create a thresholded binary image. A combination of S (from HLS) and V (from HSV) channels are used for color thresholding. For gradient thresholding, a combination of absolute (X and Y), magnitude and direction gradients are used.
 
-![alt text][image3]
+    mag_binary = grad_mag_thrsh(img,sobel_kernel,(mag_thresh_min,mag_thresh_max))
+    dir_binary = grad_dir_thrsh(img,sobel_kernel,(dir_thresh_min,dir_thresh_max))
+    absX_binary = grad_abs_thrsh(img,sobel_kernel,'x',(absX_thresh_min,absX_thresh_max))
+    absY_binary = grad_abs_thrsh(img,sobel_kernel,'y',(absY_thresh_min,absY_thresh_max))
+
+The following images show how each of the gradients affect the test image.
+
+Original Image: <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/test_images/straight_lines1.jpg" width="30%"> 
+
+Color thresholding : <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/color_thresh_straight_lines1.jpg" width="30%">
+
+Gradient thresholding : <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/grad_thresh_straight_lines1.jpg" width="30%">
+
+Final Binary Image: <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/binary_straight_lines1.jpg" width="30%">
 
 ####3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
