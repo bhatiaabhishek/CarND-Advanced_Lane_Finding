@@ -129,7 +129,9 @@ New polynomial coefficients (A, B, C) are found out with the new data point valu
 
 Now that there is a good enough measurement for the lane position for the warped image, the lanes are projected in the warped image domain and inverse perspective transform is applied to project them onto the original image. The code is implemented in **draw_lane_plot()**. The following is an example of the output.
 
-<img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/top_down_straight_lines1.jpg" width="30%"> <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/final_test3.jpg" width="30%">
+<img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/final_test3.jpg" width="30%">
+
+We can also determine the offset of the car from the center of the lane using lane positions. Once the lanes are plotted, `cv2.putText` can be used to overlay lane departure and curvature values on the image output.
 
 
 ---
