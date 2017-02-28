@@ -73,7 +73,7 @@ Final Binary Image:
 <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/binary_straight_lines1.jpg" width="30%">
 
 ####3. Perspective Transform and Warping
-At this stage we transform the image to a "bird's-eye" view of the lane using perspective transform. The function "perspective_points" in the code returns src and dst points. I derive the src points as corners of a trapezium. The Height, Top and Bottom widths are specified as % of the image dimensions.
+At this stage we transform the image to a "bird's-eye" view of the lane using perspective transform. The function **perspective_points()** in the code returns src and dst points. I derive the src points as corners of a trapezium. The Height, Top and Bottom widths are specified as % of the image dimensions.
 
     app_lane_center = ((img_size[0]/2),img_size[1]) # This is the expected center of the lane i.e. center of the trapezium
     height_cent = 0.25 # Height of the trapezium  as % of image Y
@@ -89,9 +89,9 @@ Then functions `cv2.getPerspectiveTransform` and `cv2.warpPerspective` are used 
 
 ####4. Finding Lane pixels and Fitting
 
-For a given image, a rough position of the lanes can be estimated by summing-up the warped image in vertical direction. Resultant histogram plots can found in the python notebook. The function "window_centroids" contains the code that finds lane  pixels using window-search method on the warped image. In this method we split the image into levels and use sliding convolution to find out lane pixels in each level. This function returns left lane and right lane pixel coordinates for each level. In my code, I append centroids only when both left and right lane pixels are found (convolution result > 0) in a given level.
+For a given image, a rough position of the lanes can be estimated by summing-up the warped image in vertical direction. Resultant histogram plots can found in the python notebook. The function **get_window_centroids()** contains the code that finds lane  pixels using window-search method on the warped image. In this method we split the image into levels and use sliding convolution to find out lane pixels in each level. This function returns left lane and right lane pixel coordinates for each level. In my code, I append centroids only when both left and right lane pixels are found (convolution result > 0) in a given level.
 
-Once lane pixels are found, we plot those windows on the warped image as a sanity check. This gives us an idea about the window height and the width to use for a given test scenario. I found out that for a very curved road, the window height needs to be decreased to a very small value to be able to trace that lane.
+Once lane pixels are found, we plot those windows on the warped image as a sanity check. The code is implemented in **draw_window_centroids()** function. This gives us an idea about the window height and the width to use for a given test scenario. I found that for a very curved road, the window height needs to be decreased to a very small value to be able to trace that lane.
 
 An example output on a warped image is presented below:
 
@@ -108,7 +108,7 @@ The following lines of code in find_lane() function are used to achieve this. np
 
 ####5. Radius of Curvature 
 
-The radius of curvature of the lane/road can be found from the equation described in http://www.intmath.com/applications-differentiation/8-radius-curvature.php. The code to calculate the curvature is present in find_lane() function. Before we calculate the radius of curvature, we need to convert x and y values from pixel domain to real world values. The conversion in the code is based on the fact that a lane is typically 3.7m wide. Also, we assume that in the images/video provided, we project about 30m of the lane. 
+The radius of curvature of the lane/road can be found from the equation described in http://www.intmath.com/applications-differentiation/8-radius-curvature.php. The code to calculate the curvature is present in **find_lane()** function. Before we calculate the radius of curvature, we need to convert x and y values from pixel domain to real world values. The conversion in the code is based on the fact that a lane is typically 3.7m wide. Also, we assume that in the images/video provided, we project about 30m of the lane. 
 
     act_lane_width = 3.7 # 3.7 m
     act_lane_len = 30 # 30 m
@@ -125,17 +125,18 @@ New polynomial coefficients (A, B, C) are found out with the new data point valu
     right_curverad=((1 + (2*right_fit_cr[0]*y_eval*y_m_per_pixel + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])
 
 
-####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
+####6. Output Stage
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+Now that there is a good enough measurement for the lane position for the warped image, the lanes are projected in the warped image domain and inverse perspective transform is applied to project them onto the original image. The code is implemented in **draw_lane_plot()**. The following is an example of the output.
 
-![alt text][image6]
+<img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/top_down_straight_lines1.jpg" width="30%"> <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/final_test3.jpg" width="30%">
+
 
 ---
 
 ###Pipeline (video)
 
-####1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
+The pipeline is applied to project_video.mp4 and the lanes are sucessfully projected throughout the video.
 
 Here's a [link to my video result](./project_video.mp4)
 
