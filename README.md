@@ -89,7 +89,7 @@ Then functions `cv2.getPerspectiveTransform` and `cv2.warpPerspective` are used 
 
 ####4. Finding Lane pixels and Fitting
 
-For a given image, a rough position of the lanes can be estimated by summing-up the warped image in vertical direction. Resultant histogram plots can found in the python notebook. The function **get_window_centroids()** contains the code that finds lane  pixels using window-search method on the warped image. In this method we split the image into levels and use sliding convolution to find out lane pixels in each level. This function returns left lane and right lane pixel coordinates for each level. In my code, I append centroids only when both left and right lane pixels are found (convolution result > 0) in a given level.
+For a given image, a rough position of the lanes can be estimated by summing-up the warped image in vertical direction. Resultant histogram plots can found in the python notebook. The function **get_window_centroids()** contains the code that finds lane  pixels using window-search method on the warped image. In this method we split the image into levels and use sliding convolution to find out lane pixels in each level. This function returns left lane and right lane pixel coordinates for each level. In my code, I append centroids only when both left and right lane pixels are found (convolution result > 0) in a given level. Also for each level, we search only in a small area around the X value of the previous level output. 
 
 Once lane pixels are found, we plot those windows on the warped image as a sanity check. The code is implemented in **draw_window_centroids()** function. This gives us an idea about the window height and the width to use for a given test scenario. I found that for a very curved road, the window height needs to be decreased to a very small value to be able to trace that lane.
 
@@ -146,4 +146,6 @@ Here's a [link to my video result](./project_video_lane.mp4)
 
 ###Discussion
 
-Once thing 
+* There are many stages in this project that can be optimized or tweaked to achieve better results. Once particular stage which made a huge difference was color and gradient thresholding. I tried thresholding with different color spaces. The combination of S (HLS) and V (HSV) worked well for me.
+* Another challenge that one faces is finding the src and dst points for perspective transform. I had to plot the src points on the image each time I tweaked them, to finally arrive at a good set of numbers. If I pursue this project further, I think dynamically finding the values for each frame will be helpful. 
+* I also played with the window search parameters and found varying results for different height values. If the lane line is broken by large distances and there is noise in the binary image, a small window height causes the lane to be wrongly detected. This pushes us in favor of large window heights. However, I also observed that if the road is sharply curved, most of the lane pixels could be tightly packed in a small y range. Using large windows could actually fail here. We would then need to use very small windows to be able to trace a sharp curve. But this makes the method vulnerable to a noisy image. There was a tradeoff here.
