@@ -20,18 +20,18 @@ The goals / steps of this project are the following:
 ###Camera Calibration
 
 In the first stage of the pipeline, the image needs to be undistorted i.e. camera distortion needs to be removed. To be able to do that, we need to calculate camera matrix and distortion coefficients for the camera first.
-These parameters are calculated using chessboard images from the same camera (provided in ./camera_cal). The code for camera calibration is in the first code cell of carnd-adv_lane_finding.ipynb. A class called "calibration_mat" is used to store all the calibration parameters.
+These parameters are calculated using chessboard images from the same camera (provided in ./camera_cal). The code for camera calibration is in the first code cell of carnd-advanced_lane_finding.ipynb. A class called "calibration_mat" is used to store all the calibration parameters.
 
-class calibration_mat:
-    def __init__(self,ret,mtx,dist,rvecs,tvecs):
-        self.ret = ret
-        self.mtx = mtx
-        self.dist = dist
-        self.rvecs = rvecs
-        self.tvecs = tvecs
+    class calibration_mat:
+        def __init__(self,ret,mtx,dist,rvecs,tvecs):
+            self.ret = ret
+            self.mtx = mtx
+            self.dist = dist
+            self.rvecs = rvecs
+            self.tvecs = tvecs
         
 
-First, "object points" are created, which are 3D (x, y, z) coordinates of the chessboard corners in the real world. It is assumed that the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time we successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection. The corners in the image plane can be found using function `cv2.findChessboardCorners(gray, (nx, ny), None)`.
+First, "object points" are created, which are 3D (x, y, z) coordinates of the chessboard corners in the real world. It is assumed that the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` is appended with a copy of it every time we successfully detect all chessboard corners in a test image.  `imgpoints` is appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection. The corners in the image plane can be found using function `cv2.findChessboardCorners(gray, (nx, ny), None)`.
 
 The camera calibration and distortion coefficients are calculated using the `cv2.calibrateCamera()` function. The calculated parameters (mtx, dist) are then used to undistort the chessboard images to verify correctness. `cv2.undistort()` function is used for this purporse. The following image shows an undistorted (right) chessboard image from this project.
 
@@ -40,7 +40,7 @@ The camera calibration and distortion coefficients are calculated using the `cv2
 
 ###Pipeline (single images)
 
-My pipeline is basically the function called "find_lane" in the code. This function calls other functions to implement different stages of the pipeline.
+My pipeline is implemented in a function called **find_lane()**. This function calls other functions to implement different stages of the pipeline.
 
 ####1. Distortion Correction
 The first stage of my pipeline undistorts each frame. The distortion matrices calculated above (camera calibration) are used to undistort each image. The following is the output using one of the test images (undistorted image on the right).
@@ -89,7 +89,7 @@ Then functions `cv2.getPerspectiveTransform` and `cv2.warpPerspective` are used 
 
 ####4. Finding Lane pixels and Fitting
 
-For a given image, a rough position of the lanes can be estimated by summing-up the warped image in vertical direction. Resultant histogram plots can found in the python notebook. The function **get_window_centroids()** contains the code that finds lane  pixels using window-search method on the warped image. In this method we split the image into levels and use sliding convolution to find out lane pixels in each level. This function returns left lane and right lane pixel coordinates for each level. In my code, I append centroids only when both left and right lane pixels are found (convolution result > 0) in a given level. Also for each level, we search only in a small area around the X value of the previous level output. 
+For a given image, a rough position of the lanes can be estimated by summing-up the warped image in vertical direction. Resultant histogram plots can found in the python notebook. The function **get_window_centroids()** contains the code that finds lane  pixels using window-search method on the warped image. In this method we split the image into levels and use sliding convolutions to find out lane pixels in each level. This function returns left lane and right lane pixel coordinates for each level. In my code, I append centroids only when both left and right lane pixels are found (convolution result > 0) in a given level. Also for each level, we search only in a small area around the X value of the previous level output. 
 
 Once lane pixels are found, we plot those windows on the warped image as a sanity check. The code is implemented in **draw_window_centroids()** function. This gives us an idea about the window height and the width to use for a given test scenario. I found that for a very curved road, the window height needs to be decreased to a very small value to be able to trace that lane.
 
