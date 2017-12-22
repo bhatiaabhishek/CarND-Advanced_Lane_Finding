@@ -17,7 +17,7 @@ The goals / steps of this project are the following:
 
 
 
-###Camera Calibration
+### Camera Calibration
 
 In the first stage of the pipeline, the image needs to be undistorted i.e. camera distortion needs to be removed. To be able to do that, we need to calculate camera matrix and distortion coefficients for the camera first.
 These parameters are calculated using chessboard images from the same camera (provided in ./camera_cal). The code for camera calibration is in the first code cell of carnd-advanced_lane_finding.ipynb. A class called "calibration_mat" is used to store all the calibration parameters.
@@ -38,16 +38,16 @@ The camera calibration and distortion coefficients are calculated using the `cv2
 <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/camera_cal/calibration5.jpg" width="30%"> <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/undist_calibration5.jpg" width="30%">
 
 
-###Pipeline (single images)
+### Pipeline (single images)
 
 My pipeline is implemented in a function called **find_lane()**. This function calls other functions to implement different stages of the pipeline.
 
-####1. Distortion Correction
+#### 1. Distortion Correction
 The first stage of my pipeline undistorts each frame. The distortion matrices calculated above (camera calibration) are used to undistort each image. The following is the output using one of the test images (undistorted image on the right).
 
 <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/test_images/test5.jpg" width="30%"> <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/undist_test5.jpg" width="30%">
 
-####2. Color and Gradient Threshold 
+#### 2. Color and Gradient Threshold 
 The function "color_n_grad_thresh" calls the required functions to create a thresholded binary image. A combination of S (from HLS) and V (from HSV) channels are used for color thresholding. For gradient thresholding, a combination of absolute (X and Y), magnitude and direction gradients is used.
 
     mag_binary = grad_mag_thrsh(img,sobel_kernel,(mag_thresh_min,mag_thresh_max))
@@ -72,7 +72,7 @@ Gradient thresholding :
 Final Binary Image: 
 <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/binary_straight_lines1.jpg" width="30%">
 
-####3. Perspective Transform and Warping
+#### 3. Perspective Transform and Warping
 At this stage we transform the image to a "bird's-eye" view of the lane using perspective transform. The function **perspective_points()** in the code returns src and dst points. I derive the src points as corners of a trapezium. The Height, Top and Bottom widths are specified as % of the image dimensions.
 
     app_lane_center = ((img_size[0]/2),img_size[1]) # This is the expected center of the lane i.e. center of the trapezium
@@ -87,7 +87,7 @@ Then functions `cv2.getPerspectiveTransform` and `cv2.warpPerspective` are used 
 <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/top_down_straight_lines1.jpg" width="30%"> <img src="https://github.com/bhatiaabhishek/CarND-Advanced_Lane_Finding/blob/master/output_images/top_down_test3.jpg" width="30%"> 
 
 
-####4. Finding Lane pixels and Fitting
+#### 4. Finding Lane pixels and Fitting
 
 For a given image, a rough position of the lanes can be estimated by summing-up the warped image in vertical direction. Resultant histogram plots can found in the python notebook. The function **get_window_centroids()** contains the code that finds lane  pixels using window-search method on the warped image. In this method we split the image into levels and use sliding convolutions to find out lane pixels in each level. This function returns left lane and right lane pixel coordinates for each level. In my code, I append centroids only when both left and right lane pixels are found (convolution result > 0) in a given level. Also for each level, we search only in a small area around the X value of the previous level output. 
 
@@ -106,7 +106,7 @@ The following lines of code in find_lane() function are used to achieve this. np
     left_fit = np.polyfit(ploty, leftx, 2)
     left_fitx = (left_fit[0]*ploty*ploty) + (left_fit[1]*ploty) + left_fit[2]
 
-####5. Radius of Curvature 
+#### 5. Radius of Curvature 
 
 The radius of curvature of the lane/road can be found from the equation described in http://www.intmath.com/applications-differentiation/8-radius-curvature.php. The code to calculate the curvature is present in **find_lane()** function. Before we calculate the radius of curvature, we need to convert x and y values from pixel domain to real world values. The conversion in the code is based on the fact that a lane is typically 3.7m wide. Also, we assume that in the images/video provided, we project about 30m of the lane. 
 
@@ -125,7 +125,7 @@ New polynomial coefficients (A, B, C) are found out with the new data point valu
     right_curverad=((1 + (2*right_fit_cr[0]*y_eval*y_m_per_pixel + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])
 
 
-####6. Output Stage
+#### 6. Output Stage
 
 Now that there is a good enough measurement for the lane position for the warped image, the lanes are projected in the warped image domain and inverse perspective transform is applied to project them onto the original image. The code is implemented in **draw_lane_plot()**. The following is an example of the output.
 
@@ -136,7 +136,7 @@ We can also determine the offset of the car from the center of the lane using la
 
 ---
 
-###Pipeline (video)
+### Pipeline (video)
 
 The pipeline is applied to project_video.mp4 and the lanes are sucessfully projected throughout the video.
 
@@ -144,7 +144,7 @@ Here's a [link to my video result](./project_video_lane.mp4)
 
 ---
 
-###Discussion
+### Discussion
 
 * There are many stages in this project that can be optimized or tweaked to achieve better results. Once particular stage which made a huge difference was color and gradient thresholding. I tried thresholding with different color spaces. The combination of S (HLS) and V (HSV) worked well for me.
 * Another challenge that one faces is finding the src and dst points for perspective transform. I had to plot the src points on the image each time I tweaked them, to finally arrive at a good set of numbers. If I pursue this project further, I think dynamically finding the values for each frame will be helpful. 
